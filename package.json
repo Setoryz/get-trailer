@@ -1,0 +1,16 @@
+{
+  "name": "get-trailer",
+  "version": "1.0.0",
+  "description": "Get Movie or TV Trailers",
+  "main": "dist/index.js",
+  "bin": "dist/cli.js",
+  "scripts": {
+    "build": "tsc"
+  },
+  "repository": "https://github.com/Setoryz/get-trailer",
+  "author": "Odukoya Jesuseyitan <setoryz@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^4.2.4"
+  }
+}
