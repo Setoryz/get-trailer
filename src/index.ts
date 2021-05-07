@@ -1,5 +1,8 @@
-const getTrailer = (name: string): string => {
-  return `youtube.com/${name}`;
+import getTrailer from './getTrailer';
+
+const main = () => {
+  console.log('starting...');
+  getTrailer('Birds of Prey', { category: 'Movie' });
 };
 
-export default getTrailer;
+main();
