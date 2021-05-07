@@ -1,9 +1,10 @@
 import getTmdbId from './getTmdbId';
+import { getTrailerVideoId } from './getTrailerVideoId';
 import handleErrors from './handleErrors';
+import toYoutubeUrl from './toYoutubeUrl';
 
 const APIKEY = '77d01fba2d18effb84351218c0d4af8b';
 const LANGUAGE = 'en-US';
-
 /**
  * Get Movie Details from TMDB
  * @param title MovieTitle
@@ -18,14 +19,25 @@ const getTrailer = async (
   { apiKey = APIKEY, year = null, language = LANGUAGE, category }: GetTrailerOptions,
 ): // TODO: CHANGE RETURN TYPE
 Promise<void> => {
-  const { id: movieId, error } = await getTmdbId(title.toLowerCase(), {
+  const { id: tmdbId, error: getIdError } = await getTmdbId(title.toLowerCase(), {
     apiKey,
     year,
     language,
     category,
   });
-  if (error) handleErrors(error);
-  else console.log(movieId?.length);
+
+  if (getIdError) {
+    handleErrors(getIdError);
+    return;
+  }
+  if (tmdbId) {
+    const { youtubeIds, error: getVideoIdError } = await getTrailerVideoId(tmdbId[0], { apiKey, language, category });
+    if (getVideoIdError) {
+      handleErrors(getVideoIdError);
+      return;
+    }
+    console.log(youtubeIds?.map((videoId) => toYoutubeUrl(videoId)));
+  }
   //   console.log(error);
 };
 

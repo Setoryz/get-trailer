@@ -11,7 +11,8 @@ import axios from 'axios';
  * @param {year} options.year - Movie Release Year
  * @param {language} options.language - API Request language
  */
-const getTmdbId = async (title: string, { apiKey, year, language, category }: GetIdOptions): Promise<GetIDResult> => {
+const getTmdbId: GetTmdbId = async (title: string, { apiKey, year, language, category }) => {
+  console.log('Searching ' + title);
   // Endpoint
   const ENDPOINT = `https://api.themoviedb.org/3/search/${
     category === 'Movie' ? 'movie' : 'tv'
@@ -56,8 +57,7 @@ const getTmdbId = async (title: string, { apiKey, year, language, category }: Ge
       return { id: data.results.map(({ id }) => id) };
     }
   } catch (error) {
-    //   handleErrors(error);
-    return { error: { ...error, message: 'Error making request, Check your internet connection and try again' } };
+    return { error: { ...error, message: 'Error Getting TMDB Id, Check your internet connection and try again' } };
   }
 };
 

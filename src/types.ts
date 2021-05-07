@@ -1,3 +1,4 @@
+type Title = string;
 type APIKey = string;
 type Year = number;
 type Language = string;
@@ -18,14 +19,14 @@ interface GetTrailerOptions {
   category: Category;
 }
 
-interface GetIdOptions extends Omit<Required<GetTrailerOptions>, 'year'> {
+interface GetIdOptionsParam extends Omit<Required<GetTrailerOptions>, 'year'> {
   year?: Year | null;
 }
 
-type ErrorMessage = string;
+// type ErrorMessage = string;
 
 type GetIDResult = {
-  id?: number[];
+  id?: string[];
   error?: Error;
 };
 
@@ -35,10 +36,10 @@ interface GetIDResponseDataResult {
   //   overview: string;
   //   release_date: string;
   //   genre_ids: number[];
-  id: number;
+  id: string;
   //   original_title: string;
   //   original_language: string;
-  //   title: string;
+  title: string; // TODO: --VERBOSE SHOW TITLE
   //   backdrop_path: string | null;
   //   popularity: number;
   //   vote_count: number;
@@ -57,3 +58,28 @@ interface GetIDResponseError {
 }
 
 type GetIDResponse = GetIDResponseData | GetIDResponseError;
+
+declare type GetTmdbId = (title: Title, options: GetIdOptionsParam) => Promise<GetIDResult>;
+interface GetTrailerVideoIdOptionsParam extends Omit<Required<GetTrailerOptions>, 'year' | 'category'> {
+  category?: Category;
+}
+// TODO: CHANGE
+type GetTrailerVideoIdResult = { youtubeIds?: string[]; error?: Error };
+type VideoType = 'Trailer' | 'Teaser' | 'Clip' | 'Behind the Scenes' | 'Bloopers' | 'Recap';
+type VideoSite = 'Youtube' | 'Video';
+interface GetTrailerVideoIdResponseDataResult {
+  id: number;
+  // iso_639_1: string;
+  // iso_3166_1: string;
+  key: string;
+  // name: string;
+  site: VideoSite;
+  // size: number;
+  type: VideoType;
+}
+interface GetTrailerVideoIdResponseData {
+  id: number;
+  results: GetTrailerVideoIdResponseDataResult[];
+}
+type GetTrailerVideoIdResponse = GetTrailerVideoIdResponseData | GetIDResponseError;
+// declare type GetDetails = () => Promise<void>;

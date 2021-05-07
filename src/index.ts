@@ -1,8 +1,9 @@
 import getTrailer from './getTrailer';
 
-const main = () => {
+const main = async () => {
   console.log('starting...');
-  getTrailer('Birds of Prey', { category: 'Movie' });
+  await getTrailer('Birds of Prey', { category: 'Movie' });
+  await getTrailer('Game of Thrones', { category: 'TV' });
 };
 
 main();
