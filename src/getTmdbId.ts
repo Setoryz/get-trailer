@@ -1,8 +1,5 @@
 import axios from 'axios';
 
-// TODO: Add option for Multi
-// TODO: Make category optional
-
 /**
  * Funtion to Get Movie Id using Title and Release year
  * @param title MovieTitle
@@ -12,7 +9,6 @@ import axios from 'axios';
  * @param {language} options.language - API Request language
  */
 const getTmdbId: GetTmdbId = async (title: string, { apiKey, year, language, category }) => {
-  console.log('Searching ' + title);
   // Endpoint
   const ENDPOINT = `https://api.themoviedb.org/3/search/${
     category === 'Movie' ? 'movie' : 'tv'
@@ -25,16 +21,10 @@ const getTmdbId: GetTmdbId = async (title: string, { apiKey, year, language, cat
     if ((<GetIDResponseError>response.data).status_message) {
       return { error: { name: '', message: (<GetIDResponseError>response.data).status_message } };
     }
-    const data = <GetIDResponseData>response.data;
+    const data = <GetTmdbIDResponseData>response.data;
 
     // When there is no results with year provided
     if (data.results.length === 0) {
-      // TODO: remove console logs
-      console.log(ENDPOINT);
-      console.log(year);
-      let num = 1;
-      console.log(num++);
-
       // Retry Failed Search Without Year
       if (year !== null) {
         const resultWithoutYear = await getTmdbId(title, {
@@ -54,7 +44,8 @@ const getTmdbId: GetTmdbId = async (title: string, { apiKey, year, language, cat
         },
       };
     } else {
-      return { id: data.results.map(({ id }) => id) };
+      // console.log(data.results[0].title ?? data.results[0].name);
+      return { id: data.results[0].id };
     }
   } catch (error) {
     return { error: { ...error, message: 'Error Getting TMDB Id, Check your internet connection and try again' } };

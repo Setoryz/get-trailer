@@ -1,9 +1,9 @@
 import axios from 'axios';
 
-export const getTrailerVideoId = async (
+export const getTrailerVideoId: GetTrailerVideoId = async (
   tmdbId: string,
-  { apiKey, language, category = 'Movie' }: GetTrailerVideoIdOptionsParam,
-): Promise<GetTrailerVideoIdResult> => {
+  { apiKey, language, category = 'Movie' },
+) => {
   // Endpoint
   const BASEURL = 'https://api.themoviedb.org/3/';
   let ENDPOINT;
