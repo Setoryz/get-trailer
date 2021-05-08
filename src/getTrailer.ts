@@ -25,31 +25,40 @@ const DefaultOptions: GetTrailerOptionsParam = {
  * @param {videId} options.multi - Set to True to Display Youtube video Id instead of URL
  */
 const getTrailer: GetTrailer = async (
-  title: string,
+  title = null,
   {
     apiKey = APIKEY,
     year = null,
     language = LANGUAGE,
     category = 'Movie',
+    tmdbId,
     multi = false,
     videoId = false,
   }: GetTrailerOptionsParam = DefaultOptions,
 ) => {
-  const { id: tmdbId, error: getIdError } = await getTmdbId(title.toLowerCase(), {
-    apiKey,
-    year,
-    language,
-    category,
-  });
+  let tmdbIdToUse;
+  if (title) {
+    const { id: tmdbIdResult, error: getIdError } = await getTmdbId(title.toLowerCase(), {
+      apiKey,
+      year,
+      language,
+      category,
+    });
 
-  if (getIdError) {
-    handleErrors(getIdError);
+    if (getIdError) {
+      handleErrors(getIdError);
+      return null;
+    }
+
+    if (!tmdbIdResult) return null;
+    tmdbIdToUse = tmdbIdResult;
+  } else if (!title && tmdbId) {
+    tmdbIdToUse = tmdbId;
+  } else {
     return null;
   }
 
-  if (!tmdbId) return null;
-
-  const { youtubeIds: videosIds, error: getVideoIdError } = await getTrailerVideoId(tmdbId, {
+  const { youtubeIds: videosIds, error: getVideoIdError } = await getTrailerVideoId(tmdbIdToUse, {
     apiKey,
     language,
     category,

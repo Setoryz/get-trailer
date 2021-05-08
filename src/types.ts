@@ -16,19 +16,21 @@ interface OptionsParam {
   language?: Language;
   /**
    * Category of Movie:
-   * Either Movie or TV
+   * options: 'Movie' or 'TV',
+   * default value is set to 'Movie'
    */
   category?: Category;
 }
 
 interface GetTrailerOptionsParam extends OptionsParam {
+  tmdbId?: string;
   multi?: boolean;
   videoId?: boolean;
 }
 
 type GetTrailerResult = null | string[] | string;
 
-declare type GetTrailer = (title: Title, options?: GetTrailerOptionsParam) => Promise<GetTrailerResult>;
+declare type GetTrailer = (title: Title | null, options?: GetTrailerOptionsParam) => Promise<GetTrailerResult>;
 
 interface GetTmdbIdOptionsParam extends Omit<Required<OptionsParam>, 'year'> {
   year?: Year | null;
