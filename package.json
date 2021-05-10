@@ -2,13 +2,19 @@
   "name": "get-trailer",
   "version": "1.0.0",
   "description": "Get Movie or TV Trailers",
-  "main": "dist/index.js",
-  "bin": "dist/cli.js",
+  "main": "./lib/cjs/index.js",
+  "module": "./lib/esm/index.js",
+  "bin": "./lib/esm/cli.js",
+  "files": [
+    "lib/"
+  ],
   "scripts": {
-    "build": "tsc",
-    "dev": "tsc && node dist/index.js",
+    "tsc": "tsc -p tsconfig.json && tsc -p tsconfig-cjs.json",
+    "build": "rm -rf lib/* && yarn tsc",
+    "dev": "node lib/cjs/index.js",
     "lint": "eslint '*/**/*.{js,ts,tsx}' --quiet --fix",
-    "test": "jest --config jestconfig.json"
+    "test": "jest --config jestconfig.json",
+    "start": "yarn build && yarn dev"
   },
   "husky": {
     "hooks": {
