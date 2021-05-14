@@ -35,6 +35,8 @@ interface GetTrailer {
   (tmdbId: number, options?: GetTrailerOptionsParam): Promise<GetTrailerResult>;
   (title: Title, year?: Year): Promise<GetTrailerResult>;
   (tmdbId: number, year?: Year): Promise<GetTrailerResult>;
+  (title: Title, multi?: boolean): Promise<GetTrailerResult>;
+  (tmdbId: number, multi?: boolean): Promise<GetTrailerResult>;
   (title: Title): Promise<GetTrailerResult>;
   (tmdbId: number): Promise<GetTrailerResult>;
 }

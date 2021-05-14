@@ -27,7 +27,7 @@ const DefaultOptions: GetTrailerOptionsParam = {
  */
 const getTrailer: GetTrailer = async (
   titleOrTmdbId: number | Title | null,
-  optionsOrYear?: Year | GetTrailerOptionsParam,
+  optionsOrYearOrMulti?: Year | GetTrailerOptionsParam | boolean,
 ) => {
   let options: GetTrailerOptionsParam = { ...DefaultOptions };
   let title = null;
@@ -37,13 +37,15 @@ const getTrailer: GetTrailer = async (
     title = titleOrTmdbId;
   }
 
-  if (typeof optionsOrYear === 'number') {
-    options.year = optionsOrYear;
-  } else if (options.tmdbId && !optionsOrYear) {
+  if (typeof optionsOrYearOrMulti === 'number') {
+    options.year = optionsOrYearOrMulti;
+  } else if (options.tmdbId && !optionsOrYearOrMulti) {
     options = { ...options };
-  } else if (typeof optionsOrYear === 'undefined') {
+  } else if (typeof optionsOrYearOrMulti === 'boolean') {
+    options = { ...options, multi: optionsOrYearOrMulti };
+  } else if (typeof optionsOrYearOrMulti === 'undefined') {
     options = { ...DefaultOptions };
-  } else options = { ...options, ...optionsOrYear };
+  } else options = { ...options, ...optionsOrYearOrMulti };
 
   const {
     apiKey = APIKEY,
