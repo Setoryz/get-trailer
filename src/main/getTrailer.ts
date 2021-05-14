@@ -27,7 +27,7 @@ const DefaultOptions: GetTrailerOptionsParam = {
  */
 const getTrailer: GetTrailer = async (
   titleOrTmdbId: number | Title | null,
-  optionsOrYearOrMulti?: Year | GetTrailerOptionsParam | boolean,
+  optionsOrYearOrMultiOrCategory?: Year | GetTrailerOptionsParam | boolean | Category,
 ) => {
   let options: GetTrailerOptionsParam = { ...DefaultOptions };
   let title = null;
@@ -37,15 +37,17 @@ const getTrailer: GetTrailer = async (
     title = titleOrTmdbId;
   }
 
-  if (typeof optionsOrYearOrMulti === 'number') {
-    options.year = optionsOrYearOrMulti;
-  } else if (options.tmdbId && !optionsOrYearOrMulti) {
+  if (typeof optionsOrYearOrMultiOrCategory === 'number') {
+    options.year = optionsOrYearOrMultiOrCategory;
+  } else if (options.tmdbId && !optionsOrYearOrMultiOrCategory) {
     options = { ...options };
-  } else if (typeof optionsOrYearOrMulti === 'boolean') {
-    options = { ...options, multi: optionsOrYearOrMulti };
-  } else if (typeof optionsOrYearOrMulti === 'undefined') {
+  } else if (typeof optionsOrYearOrMultiOrCategory === 'boolean') {
+    options = { ...options, multi: optionsOrYearOrMultiOrCategory };
+  } else if (typeof optionsOrYearOrMultiOrCategory === 'string') {
+    options = { ...options, category: optionsOrYearOrMultiOrCategory };
+  } else if (typeof optionsOrYearOrMultiOrCategory === 'undefined') {
     options = { ...DefaultOptions };
-  } else options = { ...options, ...optionsOrYearOrMulti };
+  } else options = { ...options, ...optionsOrYearOrMultiOrCategory };
 
   const {
     apiKey = APIKEY,
