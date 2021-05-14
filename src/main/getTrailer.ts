@@ -39,6 +39,8 @@ const getTrailer: GetTrailer = async (
 
   if (typeof optionsOrYear === 'number') {
     options.year = optionsOrYear;
+  } else if (options.tmdbId && !optionsOrYear) {
+    options = { ...options };
   } else if (typeof optionsOrYear === 'undefined') {
     options = { ...DefaultOptions };
   } else options = { ...options, ...optionsOrYear };
