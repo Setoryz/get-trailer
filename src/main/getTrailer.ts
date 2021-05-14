@@ -9,33 +9,50 @@ const DefaultOptions: GetTrailerOptionsParam = {
   apiKey: APIKEY,
   year: null,
   language: LANGUAGE,
+  tmdbId: undefined,
   category: 'Movie',
   multi: false,
   videoId: false,
 };
 /**
- * Get Movie Details from TMDB
- * @param title MovieTitle
- * @param {options} options
- * @param {apiKey} options.apiKey - Your TMDB API Key
- * @param {year} options.year - Optional: Movie or TV Release Year
- * @param {language} options.language - Optional: API Request language, default value is 'en-US'
- * @param {category} options.category - Category is either 'TV' or 'Movie', default value is set to 'Movie when  not provided
- * @param {multi} options.multi - Set to True to Display Multiple results , default value is false
- * @param {videId} options.multi - Set to True to Display Youtube video Id instead of URL
+ * Get Trailer of Movie or TV Show
+ * @param {string} title Title of the Movie:
+ * @param {GetTrailerOptionsParam} options - Optional: Configure getTrailer options
+ * @param {APIKey} options.apiKey - Your TMDB API Key
+ * @param {Year} options.year - Optional: Movie or TV Release Year
+ * @param {Language} options.language - Optional: API Request language, default: 'en-US'
+ * @param {Category} options.category - Category is either 'TV' or 'Movie', default: 'Movie'
+ * @param {boolean} options.multi - Set to True to Display Multiple results: default: {False}
+ * @param {boolean} options.videoId - Set to True to Display Youtube video Id instead of URL
  */
 const getTrailer: GetTrailer = async (
-  title = null,
-  {
+  titleOrTmdbId: number | Title | null,
+  optionsOrYear?: Year | GetTrailerOptionsParam,
+) => {
+  let options: GetTrailerOptionsParam = { ...DefaultOptions };
+  let title = null;
+  if (typeof titleOrTmdbId === 'number') {
+    options.tmdbId = String(titleOrTmdbId);
+  } else {
+    title = titleOrTmdbId;
+  }
+
+  if (typeof optionsOrYear === 'number') {
+    options.year = optionsOrYear;
+  } else if (typeof optionsOrYear === 'undefined') {
+    options = { ...DefaultOptions };
+  } else options = { ...options, ...optionsOrYear };
+
+  const {
     apiKey = APIKEY,
-    year = null,
+    year,
     language = LANGUAGE,
     category = 'Movie',
     tmdbId,
-    multi = false,
-    videoId = false,
-  }: GetTrailerOptionsParam = DefaultOptions,
-) => {
+    multi,
+    videoId,
+  }: GetTrailerOptionsParam = options;
+
   let tmdbIdToUse;
   if (title) {
     const { id: tmdbIdResult, error: getIdError } = await getTmdbId(title.toLowerCase(), {
@@ -44,15 +61,13 @@ const getTrailer: GetTrailer = async (
       language,
       category,
     });
-
     if (getIdError) {
       handleErrors(getIdError);
       return null;
-    }
-
-    if (!tmdbIdResult) return null;
+    } else if (!tmdbIdResult) return null;
     tmdbIdToUse = tmdbIdResult;
-  } else if (!title && tmdbId) {
+    // } else if (!title && tmdbId) {
+  } else if (tmdbId) {
     tmdbIdToUse = tmdbId;
   } else {
     return null;

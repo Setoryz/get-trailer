@@ -30,7 +30,12 @@ interface GetTrailerOptionsParam extends OptionsParam {
 
 type GetTrailerResult = null | string[] | string;
 
-declare type GetTrailer = (title: Title | null, options?: GetTrailerOptionsParam) => Promise<GetTrailerResult>;
+interface GetTrailer {
+  (title: Title | null, options?: GetTrailerOptionsParam): Promise<GetTrailerResult>;
+  (tmdbId: number, options?: GetTrailerOptionsParam): Promise<GetTrailerResult>;
+  (title: Title, year?: Year): Promise<GetTrailerResult>;
+  (tmdbId: number, year?: Year): Promise<GetTrailerResult>;
+}
 
 interface GetTmdbIdOptionsParam extends Omit<Required<OptionsParam>, 'year'> {
   year?: Year | null;
