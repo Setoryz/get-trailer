@@ -16,14 +16,13 @@ const DefaultOptions: GetTrailerOptionsParam = {
 };
 /**
  * Get Trailer of Movie or TV Show
- * @param {string} title Title of the Movie:
- * @param {GetTrailerOptionsParam} options - Optional: Configure getTrailer options
- * @param {APIKey} options.apiKey - Your TMDB API Key
- * @param {Year} options.year - Optional: Movie or TV Release Year
- * @param {Language} options.language - Optional: API Request language, default: 'en-US'
- * @param {Category} options.category - Category is either 'TV' or 'Movie', default: 'Movie'
- * @param {boolean} options.multi - Set to True to Display Multiple results: default: {False}
- * @param {boolean} options.videoId - Set to True to Display Youtube video Id instead of URL
+ * ~~~
+ * getTrailer(title, options)
+ * getTrailer(tmdbId, options)
+ * ~~~
+ * @param {Title | number | null} arg1  Title or TMDB ID of movie or TV show
+ * @param {Year | GetTrailerOptionsParam | boolean | Category} arg2  **options** | **year** | **multi** | **category**
+ * @returns The trailer(s) of TV or Movie
  */
 const getTrailer: GetTrailer = async (
   titleOrTmdbId: number | Title | null,
